@@ -225,7 +225,7 @@ function Calculator() {
                   : "text-red-400"
               }
             >
-              Total PnL %:{" "}
+              ROI %:{" "}
               {(
                 ((resultHundred?.profit - resultHundred?.loss) /
                   initialCapital) *
@@ -288,7 +288,7 @@ function Calculator() {
                   : "text-red-400"
               }
             >
-              Total PnL %:{" "}
+              ROI %:{" "}
               {(
                 ((resultThousand?.profit - resultThousand?.loss) /
                   initialCapital) *
@@ -353,7 +353,7 @@ function Calculator() {
                   : "text-red-400"
               }
             >
-              Total PnL %:{" "}
+              ROI %:{" "}
               {(
                 ((resultTenThousand?.profit - resultTenThousand?.loss) /
                   initialCapital) *
