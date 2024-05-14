@@ -101,7 +101,7 @@ function Calculator() {
       );
       setResultTenThousand(
         monteCarloSimulator(
-          100000000,
+          10000,
           accuracy / 100,
           riskRewardRatio,
           initialCapital,
