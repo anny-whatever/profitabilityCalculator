@@ -1,5 +1,25 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
+import {
+  Chart as ChartJS,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  Title,
+  LineElement,
+  PointElement,
+} from "chart.js";
+import { Doughnut, Line } from "react-chartjs-2";
+ChartJS.register(
+  Tooltip,
+  Legend,
+  Title,
+  CategoryScale,
+  LinearScale,
+  LineElement,
+  PointElement
+);
 
 function Calculator() {
   const [accuracy, setAccuracy] = useState();
@@ -12,6 +32,9 @@ function Calculator() {
   const [resultTenThousand, setResultTenThousand] = useState();
 
   const [status, setStatus] = useState(false);
+
+  const [chartData, setChartData] = useState();
+  const [chartName, setChartName] = useState();
 
   function monteCarloSimulator(
     numTrades,
@@ -29,6 +52,17 @@ function Calculator() {
     let maxEquity = initialCapital; // Track maximum equity
     let wins = 0;
 
+    let chartDataArray = {
+      labels: [],
+      datasets: [
+        {
+          label: "Equity PnL",
+          data: [],
+          borderColor: "#BD93F9",
+        },
+      ],
+    };
+
     for (let i = 0; i < numTrades; i++) {
       // Calculating trade size based on maximum risk per trade
       const tradeSize = capital * riskPerTrade;
@@ -43,6 +77,13 @@ function Calculator() {
 
       // Updating capital
       capital += tradeProfitLoss;
+
+      if (tradeProfitLoss > 0) {
+      }
+      chartDataArray?.labels.push("Trade: " + (i + 1));
+      chartDataArray?.datasets?.[0]?.data?.push(
+        parseFloat((capital - initialCapital).toFixed(2))
+      );
 
       // Update maximum equity
       maxEquity = Math.max(maxEquity, capital);
@@ -73,6 +114,7 @@ function Calculator() {
       drawdownPercent: maxDrawdownPercent,
       accuracy: accuracyPercentage,
       finalCapital,
+      chartDataArray,
     };
   }
 
@@ -135,7 +177,7 @@ function Calculator() {
 
       <div className="mt-2 Risk Reward">
         <label className="w-full max-w-xs form-control">
-          <div className="label">
+          <div className="label ">
             <span className="label-text">Enter your Risk:Reward Ratio</span>
           </div>
           <input
@@ -206,7 +248,30 @@ function Calculator() {
       {resultHundred && resultTenThousand && resultThousand ? (
         <div className="flex flex-col flex-wrap items-center w-full mx-4 mb-10 md:flex-row results justify-evenly">
           <div className="overflow-hidden mx-5 p-5 mt-5 rounded-lg min-w-[80%] md:min-w-[30%] md:mx-0 result bg-base-300 drop-shadow-lg h-fit">
-            <div className="text-lg head">Result 100 Trades</div>
+            <div className="flex items-center justify-between">
+              <div className="text-lg head">Result over 100 Trades</div>
+              <button
+                className="px-3 mb-1 chartBtn btn btn-accent btn-sm"
+                onClick={() => {
+                  setChartData(resultHundred.chartDataArray);
+                }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-4 h-4"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941"
+                  />
+                </svg>
+              </button>
+            </div>
             <hr className="mb-3 opacity-20" />
             <div
               className={
@@ -269,7 +334,30 @@ function Calculator() {
             </div>
           </div>
           <div className="overflow-hidden mx-5 p-5 mt-5 rounded-lg min-w-[80%] md:min-w-[30%] md:mx-0 result bg-base-300 drop-shadow-lg h-fit">
-            <div className="text-lg head">Result over 1000 trades</div>
+            <div className="flex items-center justify-between">
+              <div className="text-lg head">Result over 1000 Trades</div>
+              <button
+                className="px-3 mb-1 chartBtn btn btn-accent btn-sm"
+                onClick={() => {
+                  setChartData(resultThousand.chartDataArray);
+                }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-4 h-4"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941"
+                  />
+                </svg>
+              </button>
+            </div>
             <hr className="mb-3 opacity-20" />
             <div
               className={
@@ -332,7 +420,30 @@ function Calculator() {
             </div>
           </div>
           <div className="overflow-hidden mx-5 p-5 mt-5 rounded-lg min-w-[80%] md:min-w-[30%] md:mx-0 result bg-base-300 drop-shadow-lg h-fit">
-            <div className="text-lg head">Result over 10000 trades</div>
+            <div className="flex items-center justify-between">
+              <div className="text-lg head">Result over 10000 Trades</div>
+              <button
+                className="px-3 mb-1 chartBtn btn btn-accent btn-sm"
+                onClick={() => {
+                  setChartData(resultTenThousand.chartDataArray);
+                }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-4 h-4"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941"
+                  />
+                </svg>
+              </button>
+            </div>
             <hr className="mb-3 opacity-20" />
             <div
               className={
@@ -397,6 +508,25 @@ function Calculator() {
               Final Capital: {resultTenThousand?.finalCapital?.toLocaleString()}
             </div>
           </div>
+        </div>
+      ) : null}
+      {chartData ? (
+        <div className="w-[80%] md:w-[95%]  md:h-[80vh] mx-8 p-3 pt-2 h-[50vh] bg-base-300 rounded-2xl shadow-lg mb-10">
+          <Line
+            options={{
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  position: "top",
+                },
+                title: {
+                  display: true,
+                  text: "Equity Curve",
+                },
+              },
+            }}
+            data={chartData}
+          />
         </div>
       ) : null}
     </div>
