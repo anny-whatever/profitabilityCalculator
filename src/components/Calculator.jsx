@@ -51,6 +51,10 @@ function Calculator() {
     let maxDrawdownPercent = 0; // Track maximum drawdown
     let maxEquity = initialCapital; // Track maximum equity
     let wins = 0;
+    let winCount = 0;
+    let winStreak = [];
+    let lossCount = 0;
+    let lossStreak = [];
 
     let chartDataArray = {
       labels: [],
@@ -78,8 +82,18 @@ function Calculator() {
       // Updating capital
       capital += tradeProfitLoss;
 
-      if (tradeProfitLoss > 0) {
+      if (tradeResult > 0) {
+        lossStreak.push(lossCount);
+        lossCount = 0;
+
+        winCount = winCount + 1;
+      } else if (tradeResult < 0) {
+        winStreak.push(winCount);
+        winCount = 0;
+
+        lossCount = lossCount + 1;
       }
+
       chartDataArray?.labels.push("Trade: " + (i + 1));
       chartDataArray?.datasets?.[0]?.data?.push(
         parseFloat((capital - initialCapital).toFixed(2))
@@ -103,6 +117,9 @@ function Calculator() {
       }
     }
 
+    let longestWinStreak = Math.max(...winStreak);
+    let longestLossStreak = Math.max(...lossStreak);
+
     const finalCapital = capital;
     const accuracyPercentage = (wins / numTrades) * 100;
 
@@ -115,6 +132,10 @@ function Calculator() {
       accuracy: accuracyPercentage,
       finalCapital,
       chartDataArray,
+      longestWinStreak,
+      longestLossStreak,
+      winStreak,
+      lossStreak,
     };
   }
 
@@ -325,6 +346,24 @@ function Calculator() {
             </div>
             <div
               className={
+                resultHundred?.profit - resultHundred?.loss > 0
+                  ? "text-green-400"
+                  : "text-red-400"
+              }
+            >
+              Longest Win Streak: {resultHundred?.longestWinStreak}
+            </div>
+            <div
+              className={
+                resultHundred?.profit - resultHundred?.loss > 0
+                  ? "text-green-400"
+                  : "text-red-400"
+              }
+            >
+              Longest Loss Streak: {resultHundred?.longestLossStreak}
+            </div>
+            <div
+              className={
                 resultHundred?.finalCapital > initialCapital
                   ? "text-green-400"
                   : "text-red-400"
@@ -408,6 +447,24 @@ function Calculator() {
               }
             >
               Simulated accuracy: {resultThousand?.accuracy?.toLocaleString()}%
+            </div>
+            <div
+              className={
+                resultThousand?.profit - resultThousand?.loss > 0
+                  ? "text-green-400"
+                  : "text-red-400"
+              }
+            >
+              Longest Win Streak: {resultThousand?.longestWinStreak}
+            </div>
+            <div
+              className={
+                resultThousand?.profit - resultThousand?.loss > 0
+                  ? "text-green-400"
+                  : "text-red-400"
+              }
+            >
+              Longest Loss Streak: {resultThousand?.longestLossStreak}
             </div>
             <div
               className={
@@ -497,6 +554,24 @@ function Calculator() {
             >
               Simulated accuracy:{" "}
               {resultTenThousand?.accuracy?.toLocaleString()}%
+            </div>
+            <div
+              className={
+                resultTenThousand?.profit - resultTenThousand?.loss > 0
+                  ? "text-green-400"
+                  : "text-red-400"
+              }
+            >
+              Longest Win Streak: {resultTenThousand?.longestWinStreak}
+            </div>
+            <div
+              className={
+                resultTenThousand?.profit - resultTenThousand?.loss > 0
+                  ? "text-green-400"
+                  : "text-red-400"
+              }
+            >
+              Longest Loss Streak: {resultTenThousand?.longestLossStreak}
             </div>
             <div
               className={
