@@ -35,16 +35,6 @@ function Calculator() {
 
   const [chartData, setChartData] = useState();
 
-  useEffect(() => {
-    setChartData(resultHundred.chartDataArray);
-  }, [resultHundred]);
-  useEffect(() => {
-    setChartData(resultThousand.chartDataArray);
-  }, [resultThousand]);
-  useEffect(() => {
-    setChartData(resultTenThousand.chartDataArray);
-  }, [resultTenThousand]);
-
   function monteCarloSimulator(
     numTrades,
     accuracy,
